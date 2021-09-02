@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+
+  django:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - static_volume:/usr/src/static
+      - media_volume:/usr/src/media
+    environment:
+      DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_STATIC_ROOT: /usr/src/static
+      DJANGO_MEDIA_ROOT: /usr/src/media
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "8000:8000"
+    command: python3 manage.py runserver 0.0.0.0:8000 --insecure
+
+  postgres:
+    image: postgis/postgis:13-3.1
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ## UNCOMMENT IF YOU NEED THE POSTGIS DATABASE TO BE ACCESSIBLE
+    # ports:
+    # - 5432:5432
+
+
+volumes:
+  static_volume:
+  media_volume:

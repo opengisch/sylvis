@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+
+  django:
+    environment:
+      # live-reload, show exceptions in browser, etc.
+      DJANGO_DEBUG: "true"
+    volumes:
+      # mounting the source code for live reloading
+      - ./src/:/usr/src/app
+      - ./media/:/usr/src/media
+      - ./static/:/usr/src/static
+
+  postgres:
+    ports:
+      # making the postgres database accessible for debugging
+      - 5432:5432
