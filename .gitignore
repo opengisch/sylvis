@@ -1,4 +1,5 @@
 __pycache__
+.idea
 
 # django volumes (mounted in docker-compose.override.yml)
 /static

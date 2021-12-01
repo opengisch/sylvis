@@ -1,0 +1,29 @@
+name: Test Django Migrations
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: setup Docker
+      run: |
+        docker-compose up --build -d
+        sleep 10
+
+    - name: check migrations
+      run: |
+        docker-compose exec -T django python manage.py makemigrations --check
+
+    - name: "failure logs"
+      if: failure()
+      run: |
+        docker-compose logs
