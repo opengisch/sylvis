@@ -1,0 +1,114 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "manager",
+      "permissions": [
+        ["add_user", "auth", "user"],
+        ["change_user", "auth", "user"],
+        ["delete_user", "auth", "user"],
+        ["view_user", "auth", "user"],
+        ["add_inventory", "sylvis", "inventory"],
+        ["change_inventory", "sylvis", "inventory"],
+        ["delete_inventory", "sylvis", "inventory"],
+        ["view_inventory", "sylvis", "inventory"],
+        ["add_plot", "sylvis", "plot"],
+        ["change_plot", "sylvis", "plot"],
+        ["delete_plot", "sylvis", "plot"],
+        ["view_plot", "sylvis", "plot"],
+        ["add_section", "sylvis", "section"],
+        ["change_section", "sylvis", "section"],
+        ["delete_section", "sylvis", "section"],
+        ["view_section", "sylvis", "section"],
+        ["add_sector", "sylvis", "sector"],
+        ["change_sector", "sylvis", "sector"],
+        ["delete_sector", "sylvis", "sector"],
+        ["view_sector", "sylvis", "sector"],
+        ["add_treatment", "sylvis", "treatment"],
+        ["change_treatment", "sylvis", "treatment"],
+        ["delete_treatment", "sylvis", "treatment"],
+        ["view_treatment", "sylvis", "treatment"]
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "worker",
+      "permissions": [
+        ["add_plot", "sylvis", "plot"],
+        ["change_plot", "sylvis", "plot"],
+        ["delete_plot", "sylvis", "plot"],
+        ["view_plot", "sylvis", "plot"],
+        ["add_section", "sylvis", "section"],
+        ["change_section", "sylvis", "section"],
+        ["delete_section", "sylvis", "section"],
+        ["view_section", "sylvis", "section"],
+        ["add_inventory", "sylvis", "inventory"],
+        ["change_inventory", "sylvis", "inventory"],
+        ["delete_inventory", "sylvis", "inventory"],
+        ["view_inventory", "sylvis", "inventory"],
+        ["add_treatment", "sylvis", "treatment"],
+        ["change_treatment", "sylvis", "treatment"],
+        ["delete_treatment", "sylvis", "treatment"],
+        ["view_treatment", "sylvis", "treatment"]
+      ]
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$85atlxlemuWhAwnbLf4sjU$Ob57NdhwMr3enqG3vemfEXMF3gkXMG0wbpHEq0N94Zw=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-12-02T13:30:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$85atlxlemuWhAwnbLf4sjU$Ob57NdhwMr3enqG3vemfEXMF3gkXMG0wbpHEq0N94Zw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "manager",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-12-02T13:31:04Z",
+      "groups": [1],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$85atlxlemuWhAwnbLf4sjU$Ob57NdhwMr3enqG3vemfEXMF3gkXMG0wbpHEq0N94Zw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "worker",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-12-02T13:31:18Z",
+      "groups": [2],
+      "user_permissions": []
+    }
+  }
+]

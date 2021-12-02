@@ -2,9 +2,6 @@ __pycache__
 .idea
 .DS_Store
 
-# do not save demo data for now
-src/sylvis/fixtures/
-
 # do not save tx in source
 src/sylvis/locale
 
