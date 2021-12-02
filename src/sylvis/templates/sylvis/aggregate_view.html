@@ -1,23 +1,23 @@
 {% extends "admin/base_site.html" %}
 
-{% load model_display_utils %}
+{% load model_display_utils i18n %}
 
 {% block content %}
 
 <h1>{{entity|get_model_verbose_name}} <b>{{entity}}</b></h1>
 
 {% if entity|get_class_name == 'Plot' %}
-<h2>Plot details</h2>
+<h2>{% translate "Plot details" %}</h2>
 <ul>
-  <li>Sector: {{entity.sector}}</li>
-  <li>rotation_sections: {{entity.rotation_sections}}</li>
-  <li>rotation_treatments: {{entity.rotation_treatments}}</li>
-  <li>planned_next_section: {{entity.planned_next_section}}</li>
-  <li>planned_next_treatment: {{entity.planned_next_treatment}}</li>
+  <li>{% translate "Sector:" %} {{entity.sector}}</li>
+  <li>{% translate "Sections rotation period:" %} {{entity.rotation_sections}}</li>
+  <li>{% translate "Treatment rotation period:" %} {{entity.rotation_treatments}}</li>
+  <li>{% translate "Next planned section:" %} {{entity.planned_next_section}}</li>
+  <li>{% translate "Next planned treatment:" %} {{entity.planned_next_treatment}}</li>
 </ul>
 {% endif %}
 
-<h2>Sections</h2>
+<h2>{% translate "Sections" %}</h2>
 <table>
   <thead>
     <tr>
@@ -42,7 +42,7 @@
 </table>
 
 
-<h2>Treatments</h2>
+<h2>{% translate "Treatment" %}</h2>
 <table>
   <thead>
     <tr>
@@ -66,7 +66,7 @@
   </tbody>
 </table>
 
-<h2>Inventories</h2>
+<h2>{% translate "Inventories" %}</h2>
 <table>
   <thead>
     <tr>
