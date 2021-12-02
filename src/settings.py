@@ -14,6 +14,8 @@ import os
 from distutils.util import strtobool
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
@@ -109,6 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
+LANGUAGES = [
+    ("fr", _("French")),
+    ("en", _("English")),
+]
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
