@@ -72,7 +72,7 @@ class BaseData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
-    remarks = models.TextField(blank=True, default="")
+    remarks = models.TextField(blank=True, null=True)
 
 
 class Section(BaseData):
@@ -86,7 +86,7 @@ class Treatment(BaseData):
     class Meta:
         verbose_name = _("Treatment")
 
-    description = models.TextField(blank=True, default="")
+    description = models.TextField(blank=True, null=True)
 
 
 class Inventory(BaseData):
