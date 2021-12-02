@@ -8,12 +8,8 @@ from . import views
 from .models import Inventory, Plot, Section, Sector, Treatment
 
 
-class BaseSectorAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(Sector)
-class SectorAdmin(BaseSectorAdmin):
+class SectorAdmin(admin.ModelAdmin):
     list_display = ["__str__", "view_on_site_"]
     search_fields = ["name"]
     autocomplete_fields = ["parent"]

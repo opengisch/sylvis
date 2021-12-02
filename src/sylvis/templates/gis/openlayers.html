@@ -2,9 +2,11 @@
 {% load l10n %}
 
 {% block options %}{{ block.super }}
-options['default_lon'] = 8.3;
-options['default_lat'] = 46.9;
-options['default_zoom'] = 7;
+if( ! document.getElementById('{{ id }}').value ) {
+  options['default_lon'] = 8.3;
+  options['default_lat'] = 46.9;
+  options['default_zoom'] = 7;
+}
 {% endblock %}
 
 {% block base_layer %}
