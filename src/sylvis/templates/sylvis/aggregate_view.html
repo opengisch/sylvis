@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 
-{% load model_display_utils i18n %}
+{% load model_display_utils i18n mptt_tags %}
 
 {% block content %}
 
@@ -9,7 +9,13 @@
 {% if entity|get_class_name == 'Plot' %}
 <h2>{% translate "Plot details" %}</h2>
 <ul>
-  <li>{% translate "Sector:" %} {{entity.sector}}</li>
+  <li>
+    {% translate "Sectors:" %}
+    {% for ancestor in entity.sector.get_ancestors %}
+      <a href="{{ancestor.get_absolute_url}}">{{ancestor}}</a> &gt;
+    {% endfor %}
+    <a href="{{entity.sector.get_absolute_url}}">{{entity.sector}}</a>
+  </li>
   <li>{% translate "Sections rotation period:" %} {{entity.rotation_sections}}</li>
   <li>{% translate "Treatment rotation period:" %} {{entity.rotation_treatments}}</li>
   <li>{% translate "Next planned section:" %} {{entity.planned_next_section}}</li>
@@ -30,7 +36,7 @@
   <tbody>
   {% for section in entity.section_set.all %}
     <tr>
-      <td>{{section.plot}}</td>
+      <td><a href="{{section.plot.get_absolute_url}}">{{section.plot}}</a></td>
       <td>{{section.date}}</td>
       <td>{{section.remark}}</td>
       <td>{{section.volume}} m<sup>3</sup></td>
@@ -55,7 +61,7 @@
   <tbody>
   {% for treatment in entity.treatment_set.all %}
     <tr>
-      <td>{{treatment.plot}}</td>
+      <td><a href="{{treatment.plot.get_absolute_url}}">{{treatment.plot}}</a></td>
       <td>{{treatment.date}}</td>
       <td>{{treatment.remark}}</td>
       <td>{{treatment.description}}</td>
@@ -79,7 +85,7 @@
   <tbody>
   {% for inventory in entity.inventory_set.all %}
     <tr>
-      <td>{{inventory.plot}}</td>
+      <td><a href="{{inventory.plot.get_absolute_url}}">{{inventory.plot}}</a></td>
       <td>{{inventory.date}}</td>
       <td>{{inventory.remark}}</td>
       <td>{{inventory.standing_volume}} m<sup>3</sup></td>
