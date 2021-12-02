@@ -5,6 +5,9 @@ __pycache__
 # do not save demo data for now
 src/sylvis/fixtures/
 
+# do not save tx in source
+src/sylvis/locale
+
 # django volumes (mounted in docker-compose.override.yml)
 /static
 /media
