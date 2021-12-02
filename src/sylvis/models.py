@@ -42,10 +42,10 @@ class Plot(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("Name"))
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, blank=True, null=True)
     rotation_sections = models.IntegerField(
-        default=0, verbose_name=_("Section rotation rate")
+        null=True, blank=True, verbose_name=_("Section rotation rate")
     )
     rotation_treatments = models.IntegerField(
-        default=0, verbose_name=_("Treatment rotation rate")
+        null=True, blank=True, verbose_name=_("Treatment rotation rate")
     )
     planned_next_section = models.DateField(
         blank=True, null=True, verbose_name=_("Next planned section")
@@ -54,7 +54,7 @@ class Plot(models.Model):
         blank=True, null=True, verbose_name=_("Next planned treatment")
     )
     yearly_growth = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_("Yearly growth"), default=0
+        max_digits=10, decimal_places=2, verbose_name=_("Yearly growth"), null=True, blank=True
     )
     etale = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
