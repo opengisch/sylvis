@@ -3,16 +3,17 @@ from django.contrib.gis.db import models
 from django.forms import widgets
 from django.urls import path
 from django.utils.html import format_html
+from mptt.admin import MPTTModelAdmin
 
 from . import views
 from .models import Inventory, Plot, Section, Sector, Treatment
 
 
 @admin.register(Sector)
-class SectorAdmin(admin.ModelAdmin):
+class SectorAdmin(MPTTModelAdmin):
     list_display = ["__str__", "view_on_site_"]
     search_fields = ["name"]
-    autocomplete_fields = ["parent"]
+    # autocomplete_fields = ["parent"]  # see https://github.com/django-mptt/django-mptt/issues/800
 
     def view_on_site_(self, obj=None):
         return format_html('<a href="{}">view</a>', obj.get_absolute_url())

@@ -3,28 +3,32 @@ import uuid
 from django.contrib.gis.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Sector(models.Model):
+class Sector(MPTTModel):
     class Meta:
         verbose_name = "  " + _("Sector")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, default="")
-    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def section_set(self):
-        return Section.objects.filter(plot__sector=self)
+        descendent_sectors = self.get_descendants(include_self=True)
+        return Section.objects.filter(plot__sector__in=descendent_sectors)
 
     @property
     def inventory_set(self):
-        return Inventory.objects.filter(plot__sector=self)
+        descendent_sectors = self.get_descendants(include_self=True)
+        return Inventory.objects.filter(plot__sector__in=descendent_sectors)
 
     @property
     def treatment_set(self):
-        return Treatment.objects.filter(plot__sector=self)
+        descendent_sectors = self.get_descendants(include_self=True)
+        return Treatment.objects.filter(plot__sector__in=descendent_sectors)
 
     def get_absolute_url(self):
         return reverse("admin:sector_view", args=[self.id])
@@ -54,7 +58,11 @@ class Plot(models.Model):
         blank=True, null=True, verbose_name=_("Next planned treatment")
     )
     yearly_growth = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_("Yearly growth"), null=True, blank=True
+        max_digits=10,
+        decimal_places=2,
+        verbose_name=_("Yearly growth"),
+        null=True,
+        blank=True,
     )
     etale = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
