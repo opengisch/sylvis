@@ -38,7 +38,7 @@ class Plot(models.Model):
         verbose_name = " " + _("Plot")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    geom = models.PolygonField(srid=2056, verbose_name=_("Geometry"))
+    geom = models.MultiPolygonField(srid=2056, verbose_name=_("Geometry"))
     name = models.CharField(max_length=255, verbose_name=_("Name"))
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, blank=True, null=True)
     rotation_sections = models.IntegerField(
