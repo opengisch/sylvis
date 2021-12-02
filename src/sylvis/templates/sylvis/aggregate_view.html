@@ -4,7 +4,11 @@
 
 {% block content %}
 
-<h1>{{entity|get_model_verbose_name}} <b>{{entity}}</b></h1>
+<h1>
+  {{entity|get_model_verbose_name}}
+  <b>{{entity}}</b>
+  <a href="{{entity.get_admin_url}}">✎</a>
+</h1>
 
 {% if entity|get_class_name == 'Plot' %}
 <h2>{% translate "Plot details" %}</h2>

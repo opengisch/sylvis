@@ -88,6 +88,9 @@ class Sector(MPTTModel, ComputedFieldsModel):
     def get_absolute_url(self):
         return reverse("admin:sector_view", args=[self.id])
 
+    def get_admin_url(self):
+        return reverse("admin:sylvis_sector_change", args=[self.id])
+
     def __str__(self):
         return self.name
 
@@ -125,6 +128,9 @@ class Plot(models.Model):
 
     def get_absolute_url(self):
         return reverse("admin:plot_view", args=[self.id])
+
+    def get_admin_url(self):
+        return reverse("admin:sylvis_plot_change", args=[self.id])
 
     def __str__(self):
         return self.name
