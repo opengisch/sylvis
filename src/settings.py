@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     # vendor apps
     "mptt",
+    "computedfields",
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,5 @@ MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT", BASE_DIR.joinpath("media"))
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+COMPUTEDFIELDS_ALLOW_RECURSION = True
