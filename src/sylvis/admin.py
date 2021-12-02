@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db import models
+from django.contrib.gis.db import models
 from django.forms import widgets
 from django.urls import path
 from django.utils.html import format_html
@@ -14,13 +14,9 @@ class BaseSectorAdmin(admin.ModelAdmin):
 
 @admin.register(Sector)
 class SectorAdmin(BaseSectorAdmin):
-    list_display = [
-        "__str__",
-        "view_on_site_",
-    ]
-    search_fields = [
-        "name",
-    ]
+    list_display = ["__str__", "view_on_site_"]
+    search_fields = ["name"]
+    autocomplete_fields = ["parent"]
 
     def view_on_site_(self, obj=None):
         return format_html('<a href="{}">view</a>', obj.get_absolute_url())
@@ -57,14 +53,9 @@ class InventoryInline(BaseDataInline):
 
 @admin.register(Plot)
 class PlotAdmin(admin.ModelAdmin):
-    list_display = [
-        "__str__",
-        "sector",
-        "view_on_site_",
-    ]
-    search_fields = [
-        "name",
-    ]
+    list_display = ["__str__", "sector", "view_on_site_"]
+    search_fields = ["name"]
+    autocomplete_fields = ["sector"]
     inlines = [SectionInline, TreatmentInline, InventoryInline]
 
     def view_on_site_(self, obj=None):
@@ -83,18 +74,3 @@ class PlotAdmin(admin.ModelAdmin):
 
 class BaseDataAdmin(admin.ModelAdmin):
     autocomplete_fields = ["plot"]
-
-
-# @admin.register(Section)
-# class SectionAdmin(BaseDataAdmin):
-#     pass
-
-
-# @admin.register(Treatment)
-# class TreatmentAdmin(BaseDataAdmin):
-#     pass
-
-
-# @admin.register(Inventory)
-# class InventoryAdmin(BaseDataAdmin):
-#     pass
