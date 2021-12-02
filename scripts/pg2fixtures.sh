@@ -14,7 +14,11 @@ for i in {2..5}; do
   	jsonb(row_to_json(t))-'id' as fields
   	from (select id, name,
           $( (( $i < 5 )) && echo "('00000000-1111-000$((i+1))-0000-000000' || lpad(niv$((i+1))_id::text, 6, '0'))::uuid as parent," || echo "")
-  		    coalesce(descr, '') as description
+          coalesce(descr, '') as description,
+  		    0 as level,
+  		    0 as lft,
+  		    0 as rght,
+  		    0 as tree_id
   		  from parzellen.niv${i}) t
   ) r" > ${DIR}/src/sylvis/fixtures/sector${i}.json
 done
