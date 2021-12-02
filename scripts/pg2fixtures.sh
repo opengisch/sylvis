@@ -50,7 +50,7 @@ from (
 	from (select id,
 		    an as date,
 		    coalesce(volume, 0) as volume,
-		    remarques as remarks,
+		    coalesce(remarques, '') as remarks,
 		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
 		  from sylvic.coupes) t
 ) r" > ${DIR}/src/sylvis/fixtures/section.json
@@ -63,7 +63,7 @@ from (
 	from (select id,
 		    an as date,
 		    coalesce(vol_s_pied, 0) as standing_volume,
-		    remarques as remarks,
+		    coalesce(remarques, '') as remarks,
 		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
 		  from sylvic.inventaires) t
 ) r" > ${DIR}/src/sylvis/fixtures/inventory.json
@@ -75,8 +75,8 @@ from (
 	jsonb(row_to_json(t))-'id' as fields
 	from (select id,
 		    an as date,
-		    descr as description,
-		    remarques as remarks,
+		    coalesce(descr, '') as description,
+		    coalesce(remarques, '') as remarks,
 		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
 		  from sylvic.soins) t
 ) r" > ${DIR}/src/sylvis/fixtures/treatment.json
