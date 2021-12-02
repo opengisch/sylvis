@@ -92,6 +92,7 @@ class DummyMapModel(models.Model):
     class Meta:
         verbose_name_plural = _("Main map")
         app_label = "sylvis"
+        managed = False
 
 
 @admin.register(DummyMapModel)
