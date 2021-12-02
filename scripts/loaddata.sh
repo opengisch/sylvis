@@ -7,4 +7,4 @@ docker-compose exec django python manage.py loaddata plots
 docker-compose exec django python manage.py loaddata section
 docker-compose exec django python manage.py loaddata treatment
 docker-compose exec django python manage.py loaddata inventory
-
+docker-compose exec django python manage.py rebuild_sectors_tree
