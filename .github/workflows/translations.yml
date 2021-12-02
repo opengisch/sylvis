@@ -1,0 +1,32 @@
+name: 🌎 Translations
+
+on:
+  push:
+    branches:
+      - master
+      - tx
+
+jobs:
+  translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: install requirements
+        run: sudo apt-get install transifex-client
+
+      - name: setup Docker
+        run: |
+          docker-compose up --build -d
+          sleep 10
+
+      - name: create tx files
+        run: |
+          mkdir -p src/sylvis/locale
+          docker-compose exec -T django python manage.py makemessages -l en
+
+      - name: "🌍 Push Translations"
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        run: tx push --source
