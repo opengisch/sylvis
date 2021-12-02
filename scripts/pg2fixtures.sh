@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PGSERVICE=sylvis_import
+export PGSERVICE=sylvis_docker
 
 DIR=$(git rev-parse --show-toplevel)
 
@@ -36,3 +36,43 @@ from (
   		  st_astext(geom) as geom
 		  from parzellen.div) t
 ) r" > ${DIR}/src/sylvis/fixtures/plots.json
+
+
+psql --tuples-only -c "select json_agg(row_to_json(r))
+from (
+	select 'sylvis.section' as model,
+	('00000000-2222-0000-0001-000000' || lpad(id::text, 6, '0'))::uuid as pk,
+	jsonb(row_to_json(t))-'id' as fields
+	from (select id,
+		    an as date,
+		    coalesce(volume, 0) as volume,
+		    remarques as remarks,
+		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
+		  from sylvic.coupes) t
+) r" > ${DIR}/src/sylvis/fixtures/section.json
+
+psql --tuples-only -c "select json_agg(row_to_json(r))
+from (
+	select 'sylvis.inventory' as model,
+	('00000000-2222-0000-0002-000000' || lpad(id::text, 6, '0'))::uuid as pk,
+	jsonb(row_to_json(t))-'id' as fields
+	from (select id,
+		    an as date,
+		    coalesce(vol_s_pied, 0) as standing_volume,
+		    remarques as remarks,
+		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
+		  from sylvic.inventaires) t
+) r" > ${DIR}/src/sylvis/fixtures/inventory.json
+
+psql --tuples-only -c "select json_agg(row_to_json(r))
+from (
+	select 'sylvis.treatment' as model,
+	('00000000-2222-0000-0003-000000' || lpad(id::text, 6, '0'))::uuid as pk,
+	jsonb(row_to_json(t))-'id' as fields
+	from (select id,
+		    an as date,
+		    descr as description,
+		    remarques as remarks,
+		    ('00000000-1111-0001-0000-000000' || lpad(div_id::text, 6, '0'))::uuid as plot
+		  from sylvic.soins) t
+) r" > ${DIR}/src/sylvis/fixtures/treatment.json
