@@ -50,7 +50,7 @@ class InventoryInline(BaseDataInline):
 
 @admin.register(Plot)
 class PlotAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "sector", "view_on_site_"]
+    list_display = ["__str__", "sectors_", "view_on_site_"]
     search_fields = ["name"]
     autocomplete_fields = ["sector"]
     inlines = [SectionInline, TreatmentInline, InventoryInline]
@@ -67,6 +67,9 @@ class PlotAdmin(admin.ModelAdmin):
             ),
         ]
         return custom_urls + super().get_urls()
+
+    def sectors_(self, obj):
+        return " > ".join([a.name for a in obj.sector.get_ancestors()])
 
 
 class BaseDataAdmin(admin.ModelAdmin):

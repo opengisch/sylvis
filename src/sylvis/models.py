@@ -80,12 +80,13 @@ class BaseData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
-    remarks = models.TextField(blank=True, null=True)
+    remarks = models.TextField(blank=True, default="")
 
 
 class Section(BaseData):
     class Meta:
         verbose_name = _("Section")
+        ordering = ["date"]
 
     volume = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -93,12 +94,14 @@ class Section(BaseData):
 class Treatment(BaseData):
     class Meta:
         verbose_name = _("Treatment")
+        ordering = ["date"]
 
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, default="")
 
 
 class Inventory(BaseData):
     class Meta:
         verbose_name = _("Inventory")
+        ordering = ["date"]
 
     standing_volume = models.DecimalField(max_digits=10, decimal_places=2)

@@ -21,6 +21,15 @@
   <li>{% translate "Next planned section:" %} {{entity.planned_next_section}}</li>
   <li>{% translate "Next planned treatment:" %} {{entity.planned_next_treatment}}</li>
 </ul>
+{% else %}
+<ul>
+  <li>
+    {% translate "Sectors:" %}
+    {% for ancestor in entity.get_ancestors %}
+      <a href="{{ancestor.get_absolute_url}}">{{ancestor}}</a>{% if not forloop.last %} &gt;{% endif %}
+    {% endfor %}
+  </li>
+</ul>
 {% endif %}
 
 <h2>{% translate "Sections" %}</h2>
