@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404, render
 
 from .models import Plot, Sector
@@ -38,5 +39,21 @@ def sector_view(request, sector_id):
             "subtitle": str(sector),
             "object_id": sector.pk,
             "original": sector,
+        },
+    )
+
+
+def map_view(request):
+    plots_geojson = serialize(
+        "geojson", Plot.objects.all(), geometry_field="geom", fields=("name",)
+    )
+    return render(
+        request,
+        "sylvis/map.html",
+        {
+            "plots_geojson": plots_geojson,
+            # django-admin integration (stuff like side-menu, breadcrumbs...)
+            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
+            **admin.site.each_context(request),
         },
     )
