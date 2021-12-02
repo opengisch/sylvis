@@ -1,0 +1,92 @@
+{% extends "admin/base_site.html" %}
+
+{% load model_display_utils %}
+
+{% block content %}
+
+<h1>{{entity|get_model_verbose_name}} <b>{{entity}}</b></h1>
+
+{% if entity|get_class_name == 'Plot' %}
+<h2>Plot details</h2>
+<ul>
+  <li>Sector: {{entity.sector}}</li>
+  <li>rotation_sections: {{entity.rotation_sections}}</li>
+  <li>rotation_treatments: {{entity.rotation_treatments}}</li>
+  <li>planned_next_section: {{entity.planned_next_section}}</li>
+  <li>planned_next_treatment: {{entity.planned_next_treatment}}</li>
+</ul>
+{% endif %}
+
+<h2>Sections</h2>
+<table>
+  <thead>
+    <tr>
+      <th>plot</th>
+      <th>date</th>
+      <th>remark</th>
+      <th>volume</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for section in entity.section_set.all %}
+    <tr>
+      <td>{{section.plot}}</td>
+      <td>{{section.date}}</td>
+      <td>{{section.remark}}</td>
+      <td>{{section.volume}} m<sup>3</sup></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4"><i>No results</i></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+<h2>Treatments</h2>
+<table>
+  <thead>
+    <tr>
+      <th>plot</th>
+      <th>date</th>
+      <th>remark</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for treatment in entity.treatment_set.all %}
+    <tr>
+      <td>{{treatment.plot}}</td>
+      <td>{{treatment.date}}</td>
+      <td>{{treatment.remark}}</td>
+      <td>{{treatment.description}}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4"><i>No results</i></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Inventories</h2>
+<table>
+  <thead>
+    <tr>
+      <th>plot</th>
+      <th>date</th>
+      <th>remark</th>
+      <th>standing_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for inventory in entity.inventory_set.all %}
+    <tr>
+      <td>{{inventory.plot}}</td>
+      <td>{{inventory.date}}</td>
+      <td>{{inventory.remark}}</td>
+      <td>{{inventory.standing_volume}} m<sup>3</sup></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4"><i>No results</i></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

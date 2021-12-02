@@ -1,29 +1,46 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import widgets
+from django.urls import path
+from django.utils.html import format_html
 
-from .models import Inventory, Plot, Section, SectorA, SectorB, SectorC, Treatment
+from . import views
+from .models import Inventory, Plot, Section, Sector, Treatment
 
 
 class BaseSectorAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(SectorA)
-class SectorAAdmin(BaseSectorAdmin):
-    pass
+@admin.register(Sector)
+class SectorAdmin(BaseSectorAdmin):
+    list_display = [
+        "__str__",
+        "view_on_site_",
+    ]
+    search_fields = [
+        "name",
+    ]
 
+    def view_on_site_(self, obj=None):
+        return format_html('<a href="{}">view</a>', obj.get_absolute_url())
 
-@admin.register(SectorB)
-class SectorBAdmin(BaseSectorAdmin):
-    pass
-
-
-@admin.register(SectorC)
-class SectorCAdmin(BaseSectorAdmin):
-    pass
+    def get_urls(self):
+        custom_urls = [
+            path(
+                "<uuid:sector_id>/aggregate/",
+                self.admin_site.admin_view(views.sector_view),
+                name="sector_view",
+            ),
+        ]
+        return custom_urls + super().get_urls()
 
 
 class BaseDataInline(admin.TabularInline):
     extra = 0
+    formfield_overrides = {
+        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 2})},
+    }
 
 
 class SectionInline(BaseDataInline):
@@ -41,32 +58,43 @@ class InventoryInline(BaseDataInline):
 @admin.register(Plot)
 class PlotAdmin(admin.ModelAdmin):
     list_display = [
-        "name",
+        "__str__",
+        "sector",
+        "view_on_site_",
     ]
     search_fields = [
         "name",
     ]
-    inlines = [
-        SectionInline,
-        TreatmentInline,
-        InventoryInline,
-    ]
+    inlines = [SectionInline, TreatmentInline, InventoryInline]
+
+    def view_on_site_(self, obj=None):
+        return format_html('<a href="{}">view</a>', obj.get_absolute_url())
+
+    def get_urls(self):
+        custom_urls = [
+            path(
+                "<uuid:plot_id>/aggregate/",
+                self.admin_site.admin_view(views.plot_view),
+                name="plot_view",
+            ),
+        ]
+        return custom_urls + super().get_urls()
 
 
 class BaseDataAdmin(admin.ModelAdmin):
     autocomplete_fields = ["plot"]
 
 
-@admin.register(Section)
-class SectionAdmin(BaseDataAdmin):
-    pass
+# @admin.register(Section)
+# class SectionAdmin(BaseDataAdmin):
+#     pass
 
 
-@admin.register(Treatment)
-class TreatmentAdmin(BaseDataAdmin):
-    pass
+# @admin.register(Treatment)
+# class TreatmentAdmin(BaseDataAdmin):
+#     pass
 
 
-@admin.register(Inventory)
-class InventoryAdmin(BaseDataAdmin):
-    pass
+# @admin.register(Inventory)
+# class InventoryAdmin(BaseDataAdmin):
+#     pass
