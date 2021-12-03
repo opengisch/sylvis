@@ -1,6 +1,7 @@
 __pycache__
 .idea
 .DS_Store
+.orig
 
 # do not save tx in source
 src/sylvis/locale
