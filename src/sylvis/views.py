@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.core.serializers import serialize
 from datetime import date
+from collections import defaultdict
 from django.shortcuts import get_object_or_404, render
 from bokeh.plotting import figure
 from bokeh.embed import components
@@ -31,17 +32,14 @@ def sector_view(request, sector_id):
 
     # history
     years = list(range(date.today().year-10, date.today().year))
-    sections = dict()
-    volumes = dict()
+
+    sections = defaultdict(int)
+    volumes = defaultdict(int)
     for section in sector.section_set.exclude(date__isnull=True):
         if section.date.year < min(years):
             years[:0] = list(range(section.date.year, min(years)))
-        if section.date.year not in sections:
-            sections[section.date.year] = 1
-            volumes[section.date.year] = section.volume
-        else:
-            sections[section.date.year] += 1
-            volumes[section.date.year] += section.volume
+        sections[section.date.year] += 1
+        volumes[section.date.year] += section.volume
 
     sections_filled = [sections.get(y, 0) for y in years]
     p1 = figure(height=250, title="Total of done sections", toolbar_location=None, tools="")
@@ -53,15 +51,12 @@ def sector_view(request, sector_id):
     descendent_sectors = sector.get_descendants(include_self=True)
     qs2 = Plot.objects.filter(sector__in=descendent_sectors, planned_next_section__gte=str(date.today()))
     years = list(range(date.today().year, date.today().year+10))
-    sections = dict()
+    sections = defaultdict(int)
     for plot in qs2.all():
         section_date = plot.planned_next_section
         if section_date.year > max(years):
             years.extend(list(range(max(years)+1, section_date.year+1)))
-        if section_date.year not in sections:
-            sections[section_date.year] = 1
-        else:
-            sections[section_date.year] += 1
+        sections[section_date.year] += 1
 
     sections_filled = [sections.get(y, 0) for y in years]
     p2 = figure(height=250, title="Total planned sections", toolbar_location=None, tools="")
