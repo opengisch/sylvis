@@ -23,7 +23,8 @@ jobs:
 
       - name: create tx files
         run: |
-          mkdir -p src/sylvis/locale
+          cd src/sylvis
+          mkdir -p locale
           docker-compose exec -T django python manage.py makemessages -l en
 
       - name: "🌍 Push Translations"
