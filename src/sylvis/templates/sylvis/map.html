@@ -8,6 +8,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.css" type="text/css" media="all" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/ol-layerswitcher@2.0.0/src/ol-layerswitcher.css" type="text/css" media="all" rel="stylesheet">
+<script src="https://unpkg.com/ol-layerswitcher@2.0.0/dist/ol-layerswitcher.js"></script>
+
 <style>
 /* full width map */
 #content {
@@ -29,26 +32,9 @@
 
 <div id="map" class="map"></div>
 <script type="text/javascript">
-  var backgroundLayer = new ol.layer.Tile({source: new ol.source.XYZ({
-    url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.landeskarte-grau-10/default/current/3857/{z}/{x}/{y}.png'
-  })});
-  var geojsonFormat = new ol.format.GeoJSON({dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
-  var plotsLayer = new ol.layer.Vector({
-    source: new ol.source.Vector({
-      features: geojsonFormat.readFeatures({{plots_geojson|safe}}),
-    })
-    // style: styleFunction,
-  });
-  var map = new ol.Map({
-    target: 'map',
-    layers: [backgroundLayer,plotsLayer],
-    view: new ol.View({
-      center: ol.proj.fromLonLat([8.3, 46.9]),
-      zoom: 7
-    }),
-    controls: ol.control.defaults().extend([new ol.control.MousePosition()]),
-  });
-  map.getView().fit(plotsLayer.getSource().getExtent());
+  var plotsGeojson = {{plots_geojson|safe}};
+  var sectorsGeojsons = {{sectors_geojsons|safe}};
+  {% include "sylvis/map.js" %}
 </script>
 
 {% endblock %}
