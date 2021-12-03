@@ -19,13 +19,12 @@ jobs:
       - name: setup Docker
         run: |
           docker-compose up --build -d
-          sleep 10
+          sleep 15
 
       - name: create tx files
         run: |
-          cd src/sylvis
-          mkdir -p locale
-          docker-compose exec -T django python manage.py makemessages -l en
+          mkdir -p src/sylvis/locale
+          docker-compose exec -T -w /usr/src/sylvis django python manage.py makemessages -l en
 
       - name: "🌍 Push Translations"
         env:
