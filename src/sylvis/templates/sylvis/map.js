@@ -51,7 +51,6 @@ sectorsGeojsons.forEach((sectorsGeojson, idx) => {
         feature.color = sectorColors[i % sectorColors.length];
         i++;
       }
-      console.log("test");
       return new ol.style.Style({
         fill: new ol.style.Fill({
           color: [...feature.color, 0.5]
