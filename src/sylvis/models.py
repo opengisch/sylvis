@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from computedfields.models import ComputedFieldsModel, computed
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import MultiPolygon, Polygon
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from mptt.models import MPTTModel, TreeForeignKey
@@ -69,6 +70,30 @@ class Sector(MPTTModel, ComputedFieldsModel):
         for treatment in self.treatment_set.exclude(date__isnull=True):
             counts[treatment.date.year] += 1
         return counts
+
+    @computed(
+        models.MultiPolygonField(srid=2056, default=MultiPolygon),
+        depends=[["children", ["computed_geom"]], ["plots", ["geom"]]],
+    )
+    def computed_geom(self):
+        polygon = MultiPolygon()
+
+        # Aggregate geometries from plots
+        for plot in self.plots.all():
+            polygon = polygon.union(plot.geom.buffer(10))
+
+        # Aggregate geometries from child sectors
+        for child in self.children.all():
+            polygon = polygon.union(child.computed_geom)
+
+        # Simplify
+        polygon = polygon.simplify(5)
+
+        # Force multipolygon
+        if isinstance(polygon, Polygon):
+            polygon = MultiPolygon([polygon])
+
+        return polygon
 
     @property
     def section_set(self):
