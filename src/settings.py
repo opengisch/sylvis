@@ -116,7 +116,7 @@ LANGUAGES = [
     ("fr", _("French")),
     ("en", _("English")),
 ]
-LOCALE_PATHS = ('/sylvis/locale')
+LOCALE_PATHS = ['/sylvis/locale']
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True

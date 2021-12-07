@@ -19,12 +19,17 @@ jobs:
       - name: setup Docker
         run: |
           docker-compose up --build -d
-          sleep 15
+          sleep 10
 
       - name: create tx files
         run: |
           mkdir -p src/sylvis/locale
-          docker-compose exec -T -w /usr/src/sylvis django python manage.py makemessages -l en
+          docker-compose exec -T -w /usr/src/app/sylvis django python ../manage.py makemessages -l en
+
+      - name: "failure logs"
+        if: failure()
+        run: |
+          docker-compose logs
 
       - name: "🌍 Push Translations"
         env:
