@@ -1,27 +1,17 @@
-# Opengis.ch Geodjango template
-
-This is a template repository to serve as a base for building Geodjango projects.
-
-It consists of a sample Django project with a docker compose setup.
-
-It should work on any system that runs a recent version of Docker.
+# Sylvis prototype
 
 
 ## Quickstart
 
 ```
-# Clone the repository
-git clone https://github.com/opengisch/template-geodjango.git -o template myproject
-
-# Enter in the directory
-cd myproject
-
 # Start the stack
 docker compose up --build -d
 
-# Create a superuser
-docker compose exec django python manage.py createsuperuser
+# Restore initial data
+./scripts/loaddata.sh
 ```
+
+Note: initial data fixtures are not yet versionned. You must manually copy `sector5.json` `sector4.json` `sector3.json` `sector2.json` `plots.json` `section.json` `treatment.json` `inventory.json` to `src/sylvis/fixtures` for loaddata.sh to fully work.
 
 After a while, you should be able to access `http://localhost:8000/admin` in your browser.
 
@@ -73,3 +63,4 @@ pre-commit install
 - [ ] Include VSCode config for code completion/live debugging.
 - [ ] Include Github actions to run tests.
 - [ ] Run using gunicorn (or similar) on production instead of live dev server.
+- [ ] Backup setup
