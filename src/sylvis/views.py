@@ -1,11 +1,13 @@
-from datetime import date
 from collections import defaultdict
+from datetime import date
+
+from bokeh.embed import components
+from bokeh.plotting import figure
 from django.contrib import admin
 from django.core.serializers import serialize
 from django.db.models import Max
 from django.shortcuts import get_object_or_404, render
-from bokeh.plotting import figure
-from bokeh.embed import components
+
 from .models import Plot, Sector
 
 
@@ -32,7 +34,7 @@ def sector_view(request, sector_id):
     sector = get_object_or_404(Sector, id=sector_id)
 
     # history
-    years = list(range(date.today().year-10, date.today().year))
+    years = list(range(date.today().year - 10, date.today().year))
 
     sections = defaultdict(int)
     volumes = defaultdict(int)
@@ -43,24 +45,30 @@ def sector_view(request, sector_id):
         volumes[section.date.year] += section.volume
 
     sections_filled = [sections.get(y, 0) for y in years]
-    p1 = figure(height=250, title="Total of done sections", toolbar_location=None, tools="")
+    p1 = figure(
+        height=250, title="Total of done sections", toolbar_location=None, tools=""
+    )
     p1.vbar(x=years, top=sections_filled, width=0.9)
     p1.xgrid.grid_line_color = None
     p1.y_range.start = 0
 
     # planned
     descendent_sectors = sector.get_descendants(include_self=True)
-    qs2 = Plot.objects.filter(sector__in=descendent_sectors, planned_next_section__gte=str(date.today()))
-    years = list(range(date.today().year, date.today().year+10))
+    qs2 = Plot.objects.filter(
+        sector__in=descendent_sectors, planned_next_section__gte=str(date.today())
+    )
+    years = list(range(date.today().year, date.today().year + 10))
     sections = defaultdict(int)
     for plot in qs2.all():
         section_date = plot.planned_next_section
         if section_date.year > max(years):
-            years.extend(list(range(max(years)+1, section_date.year+1)))
+            years.extend(list(range(max(years) + 1, section_date.year + 1)))
         sections[section_date.year] += 1
 
     sections_filled = [sections.get(y, 0) for y in years]
-    p2 = figure(height=250, title="Total planned sections", toolbar_location=None, tools="")
+    p2 = figure(
+        height=250, title="Total planned sections", toolbar_location=None, tools=""
+    )
     p2.vbar(x=years, top=sections_filled, width=0.9)
     p2.xgrid.grid_line_color = None
     p2.y_range.start = 0
@@ -81,10 +89,10 @@ def sector_view(request, sector_id):
             "subtitle": str(sector),
             "object_id": sector.pk,
             "original": sector,
-            'bokeh_script_history': bokeh_script_1,
-            'bokeh_graph_history': bokeh_graph_1,
-            'bokeh_script_planned': bokeh_script_2,
-            'bokeh_graph_planned': bokeh_graph_2
+            "bokeh_script_history": bokeh_script_1,
+            "bokeh_graph_history": bokeh_graph_1,
+            "bokeh_script_planned": bokeh_script_2,
+            "bokeh_graph_planned": bokeh_graph_2,
         },
     )
 

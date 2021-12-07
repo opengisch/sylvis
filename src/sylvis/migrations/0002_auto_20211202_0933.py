@@ -6,23 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sylvis', '0001_initial'),
+        ("sylvis", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='plot',
-            name='rotation_sections',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Section rotation rate'),
+            model_name="plot",
+            name="rotation_sections",
+            field=models.IntegerField(
+                blank=True, null=True, verbose_name="Section rotation rate"
+            ),
         ),
         migrations.AlterField(
-            model_name='plot',
-            name='rotation_treatments',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Treatment rotation rate'),
+            model_name="plot",
+            name="rotation_treatments",
+            field=models.IntegerField(
+                blank=True, null=True, verbose_name="Treatment rotation rate"
+            ),
         ),
         migrations.AlterField(
-            model_name='plot',
-            name='yearly_growth',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True, verbose_name='Yearly growth'),
+            model_name="plot",
+            name="yearly_growth",
+            field=models.DecimalField(
+                blank=True,
+                decimal_places=2,
+                max_digits=10,
+                null=True,
+                verbose_name="Yearly growth",
+            ),
         ),
     ]
