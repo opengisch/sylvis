@@ -95,7 +95,7 @@ def map_view(request):
         "geojson",
         plots,
         geometry_field="geom",
-        fields=("name",),
+        fields=("pk", "name"),
     )
 
     # TODO: simplify polygons with something like
@@ -113,7 +113,7 @@ def map_view(request):
             "geojson",
             sectors.filter(level=level),
             geometry_field="computed_geom",
-            fields=("name", "level"),
+            fields=("pk", "name", "level"),
         )
         sectors_geojsons.append(sectors_geojson)
 

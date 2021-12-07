@@ -34,6 +34,8 @@
 <script type="text/javascript">
   var plotsGeojson = {{plots_geojson|safe}};
   var sectorsGeojsons = {{sectors_geojsons|safe}};
+  var sectorUrlTemplate = '{% url 'admin:sector_view' '00000000-0000-0000-0000-000000000000' %}';
+  var plotUrlTemplate = '{% url 'admin:plot_view' '00000000-0000-0000-0000-000000000000' %}';
   {% include "sylvis/map.js" %}
 </script>
 
