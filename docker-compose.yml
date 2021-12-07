@@ -18,7 +18,9 @@ services:
       - 443:443
 
   django:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
     restart: unless-stopped
     volumes:
       - static_volume:/static_volume
