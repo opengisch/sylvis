@@ -23,9 +23,13 @@ jobs:
 
       - name: create tx files
         run: |
-          cd src/sylvis
-          mkdir -p locale
-          docker-compose exec -T django python manage.py makemessages -l en
+          mkdir -p src/sylvis/locale
+          docker-compose exec -T -w /usr/src/app/sylvis django python ../manage.py makemessages -l en
+
+      - name: "failure logs"
+        if: failure()
+        run: |
+          docker-compose logs
 
       - name: "🌍 Push Translations"
         env:
