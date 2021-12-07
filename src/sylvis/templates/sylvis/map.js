@@ -9,7 +9,8 @@ var sectorColors = [[141,211,199],[255,255,179],[190,186,218],[251,128,114],[128
 var backgroundLayer = new ol.layer.Tile({
   title: "Swisstopo",
   source: new ol.source.XYZ({
-    url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.landeskarte-grau-10/default/current/3857/{z}/{x}/{y}.png'
+    url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.landeskarte-grau-10/default/current/3857/{z}/{x}/{y}.png',
+    maxZoom: 19
   })
 });
 
@@ -70,8 +71,13 @@ sectorsGeojsons.forEach((sectorsGeojson, idx) => {
     visible: false
   });
   sectorsLayers.push(sectorsLayer);
-
 });
+sectorsLayers.push(
+  new ol.layer.Vector({
+    title: `No sectors`,
+    type: "base"
+  })
+);
 var sectorsGroup = new ol.layer.Group({
   title: 'Sectors',
   layers: sectorsLayers

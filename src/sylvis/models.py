@@ -78,9 +78,12 @@ class Sector(MPTTModel, ComputedFieldsModel):
     def computed_geom(self):
         polygon = MultiPolygon()
 
-        # Aggregate geometries from plots
+        # Aggregate geometries from plots (buffered to join nearby polygons)
         for plot in self.plots.all():
             polygon = polygon.union(plot.geom.buffer(10))
+
+        # Debuffer to retrieve original limits
+        polygon = polygon.buffer(-10)
 
         # Aggregate geometries from child sectors
         for child in self.children.all():
