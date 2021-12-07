@@ -12,7 +12,7 @@ services:
       - media_volume:/media_volume
     restart: unless-stopped
     environment:
-      HOST: ${HOST}
+      HOST: ${HOST:?}
     ports:
       - 80:80
       - 443:443
@@ -27,17 +27,17 @@ services:
       - media_volume:/media_volume
     environment:
       DJANGO_DEBUG: "false"
-      HOST: ${HOST}
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      HOST: ${HOST:?}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?}
       DJANGO_STATIC_ROOT: /static_volume
       DJANGO_MEDIA_ROOT: /media_volume
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
     command: python3 manage.py runserver 0.0.0.0:8000
 
   postgres:
     image: postgis/postgis:13-3.1
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
     ## UNCOMMENT IF YOU NEED THE POSTGIS DATABASE TO BE ACCESSIBLE
     # ports:
     # - 5432:5432
