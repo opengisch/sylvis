@@ -1,0 +1,46 @@
+name: Deploy to production
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # We don't need the source for release
+    # - uses: actions/checkout@v2
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/prod.key
+        chmod 600 ~/.ssh/prod.key
+        cat >>~/.ssh/config <<END
+        Host prod
+          HostName $SSH_HOST
+          Port $SSH_PORT
+          User $SSH_USER
+          IdentityFile ~/.ssh/prod.key
+          StrictHostKeyChecking no
+        END
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+        SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+        SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+
+    - name: Get changes
+      run: ssh prod "cd /root/sylvis && git fetch origin && git checkout --force ${{ github.head_ref }}"
+
+    - name: Append production stack config
+      run: ssh prod "cd /root/sylvis && echo "$ENV_OVERRIDE" >> .env"
+      env:
+        ENV_OVERRIDE: ${{secrets.DEPLOY_ENV_OVERRIDE}}
+
+    - name: Redeploy
+      run: ssh prod "cd /root/sylvis && docker-compose -f docker-compose.yml up --build -d --remove-orphans"
