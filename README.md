@@ -13,7 +13,7 @@ docker compose up --build -d
 
 Note: initial data fixtures are not yet versionned. You must manually copy `sector5.json` `sector4.json` `sector3.json` `sector2.json` `plots.json` `section.json` `treatment.json` `inventory.json` to `src/sylvis/fixtures` for loaddata.sh to fully work.
 
-After a while, you should be able to access `http://localhost:8000/admin` in your browser.
+After a while, you should be able to access `http://localhost` in your browser.
 
 To completely remove the stack (including all data !)
 ```
