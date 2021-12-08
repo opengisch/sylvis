@@ -62,8 +62,8 @@ def sector_view(request, sector_id):
     p1.xaxis.ticker = FixedTicker(ticks=years)
     p1.xgrid.grid_line_color = None
 
-    p1.line(x=years, y=sections_filled, line_width=0.9)
-    p1.circle(x=years, y=sections_filled, radius=0.1)
+    p1.line(x=years, y=sections_filled, line_width=0.9, line_color="#3c9765")
+    p1.circle(x=years, y=sections_filled, radius=0.1, fill_color="#4db164")
 
     # Setting the second y axis range name and range
     p1.extra_y_ranges = {"foo": Range1d(start=0, end=1.1 * float(max(volumes_filled)))}
@@ -74,10 +74,12 @@ def sector_view(request, sector_id):
         x=years,
         top=volumes_filled,
         width=0.9,
-        fill_color="green",
+        fill_color="#4db164",
+        line_color="#3c9765",
         fill_alpha=0.5,
         y_range_name="foo",
     )
+    p1.sizing_mode = "scale_both"
 
     # planned
     descendent_sectors = sector.get_descendants(include_self=True)
@@ -102,8 +104,8 @@ def sector_view(request, sector_id):
     p2.xaxis.ticker = FixedTicker(ticks=years)
     p2.xgrid.grid_line_color = None
 
-    p2.line(x=years, y=sections_filled, line_width=0.9)
-    p2.circle(x=years, y=sections_filled, radius=0.1)
+    p2.line(x=years, y=sections_filled, line_width=0.9, line_color="#3c9765")
+    p2.circle(x=years, y=sections_filled, radius=0.1, fill_color="#4db164")
     p2.y_range.start = 0
     p2.sizing_mode = "scale_both"
 
