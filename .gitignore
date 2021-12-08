@@ -3,6 +3,9 @@ __pycache__
 .DS_Store
 .orig
 
+# local config
+.env
+
 # do not save tx in source
 src/sylvis/locale
 

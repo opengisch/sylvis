@@ -4,6 +4,10 @@
 ## Quickstart
 
 ```
+# Configure the stack
+cp .env.example .env
+nano .env
+
 # Start the stack
 docker compose up --build -d
 
@@ -82,9 +86,9 @@ It requires the following secrets:
 - `DEPLOY_SSH_USER`
 - `DEPLOY_SSH_HOST`
 - `DEPLOY_SSH_PORT`
-- `DEPLOY_ENV_OVERRIDE` (stack configuration to override in .env)
 
-It is assumed the checkout repo is available under `./sylvis` for that SSH user.
+It is assumed the checkout repo is available under `./sylvis` for that SSH user, with a `.env` file
+containing the deployment stack config.
 
 ## Code style
 

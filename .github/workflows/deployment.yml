@@ -37,10 +37,5 @@ jobs:
     - name: Get changes
       run: ssh prod "cd /root/sylvis && git fetch origin && git checkout --force ${{ github.head_ref }}"
 
-    - name: Append production stack config
-      run: ssh prod "cd /root/sylvis && echo "$ENV_OVERRIDE" >> .env"
-      env:
-        ENV_OVERRIDE: ${{secrets.DEPLOY_ENV_OVERRIDE}}
-
     - name: Redeploy
       run: ssh prod "cd /root/sylvis && docker-compose -f docker-compose.yml up --build -d --remove-orphans"
