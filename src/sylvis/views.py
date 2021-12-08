@@ -9,8 +9,10 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.db.models import Max
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
+from .forms import AddInventoryForm, AddSectionForm, AddTreatmentForm
 from .models import Plot, Sector
 
 
@@ -22,12 +24,39 @@ def home(request):
 @login_required
 def plot_view(request, plot_id):
     plot = get_object_or_404(Plot, id=plot_id)
+
+    section_form = AddSectionForm(plot_id)
+    inventory_form = AddInventoryForm(plot_id)
+    treatment_form = AddTreatmentForm(plot_id)
+
+    if request.method == "POST":
+        if "add_section" in request.POST:
+            section_form = AddSectionForm(plot_id, request.POST)
+            if section_form.is_valid():
+                section_form.save()
+                return HttpResponseRedirect(request.path_info)
+
+        if "add_inventory" in request.POST:
+            inventory_form = AddInventoryForm(plot_id, request.POST)
+            if inventory_form.is_valid():
+                inventory_form.save()
+                return HttpResponseRedirect(request.path_info)
+
+        if "add_treatment" in request.POST:
+            treatment_form = AddTreatmentForm(plot_id, request.POST)
+            if treatment_form.is_valid():
+                treatment_form.save()
+                return HttpResponseRedirect(request.path_info)
+
     return render(
         request,
         "sylvis/detail_plot.html",
         {
             "entity": plot,
             "features_geojson": serialize("geojson", [plot], geometry_field="geom"),
+            "section_form": section_form,
+            "inventory_form": inventory_form,
+            "treatment_form": treatment_form,
         },
     )
 

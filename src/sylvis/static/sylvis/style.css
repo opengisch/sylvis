@@ -47,6 +47,11 @@ table {
         font-weight: 100;
     }
 
+.scrollable {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
 nav {
     flex-grow: 0;
     display: flex;
@@ -75,7 +80,7 @@ nav {
     nav .search input {
         border-radius: 20px;
         border: none;
-        box-shadow: inset #aaa 0 1px 3px;
+        box-shadow: inset rgba(0,0,0,0.3) 0 1px 3px;
         padding: 5px;
         background: none;
 
@@ -134,7 +139,7 @@ main {
         font-weight: bold;
         line-height: 0px;
         background-color: #3c9765;
-        box-shadow: #aaa 0px 5px 10px 0px;
+        box-shadow: rgba(0,0,0,0.3) 0px 5px 10px 0px;
         z-index: 100;
     }
 

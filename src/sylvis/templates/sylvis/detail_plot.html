@@ -26,3 +26,129 @@
 </table>
 
 {% endblock %}
+
+
+{% block sections %}
+<form method="POST">
+{% csrf_token %}
+<table>
+  <thead>
+    <tr>
+      <th>{% translate "date" %}</th>
+      <th>{% translate "volume" %}</th>
+      <th colspan="2">{% translate "remarks" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for section in entity.section_set.all %}
+    <tr>
+      <td>{{section.date}}</td>
+      <td>{{section.volume}} m<sup>3</sup></td>
+      <td colspan="2">{{section.remarks|default:'-'}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td>
+        {{ section_form.date.errors }}
+        {{ section_form.date }}
+      </td>
+      <td>
+        {{ section_form.volume.errors }}
+        {{ section_form.volume }}
+      </td>
+      <td>
+        {{ section_form.remarks.errors }}
+        {{ section_form.remarks }}
+      </td>
+      <td>
+        <input type="submit" name="add_section" value="{% translate 'add' %}">
+      </td>
+    </tr>
+  </tbody>
+</table>
+</form>
+{% endblock %}
+
+
+{% block treatments %}
+<form method="POST">
+{% csrf_token %}
+<table>
+  <thead>
+    <tr>
+      <th>{% translate "date" %}</th>
+      <th>{% translate "description" %}</th>
+      <th colspan="2">{% translate "remarks" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for treatment in entity.treatment_set.all %}
+    <tr>
+      <td>{{treatment.date}}</td>
+      <td>{{treatment.description}}</td>
+      <td colspan="2">{{treatment.remarks|default:'-'}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td>
+        {{ treatment_form.date.errors }}
+        {{ treatment_form.date }}
+      </td>
+      <td>
+        {{ treatment_form.description.errors }}
+        {{ treatment_form.description }}
+      </td>
+      <td>
+        {{ treatment_form.remarks.errors }}
+        {{ treatment_form.remarks }}
+      </td>
+      <td>
+        <input type="submit" name="add_treatment" value="{% translate 'add' %}">
+      </td>
+    </tr>
+  </tbody>
+</table>
+</form>
+{% endblock %}
+
+
+{% block inventories %}
+<form method="POST">
+{% csrf_token %}
+<table>
+  <thead>
+    <tr>
+      <th>{% translate "date" %}</th>
+      <th>{% translate "standing volume" %}</th>
+      <th colspan="2">{% translate "remarks" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for inventory in entity.inventory_set.all %}
+    <tr>
+      <td>{{inventory.date}}</td>
+      <td>{{inventory.standing_volume}} m<sup>3</sup></td>
+      <td colspan="2">{{inventory.remarks|default:'-'}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td>
+        {{ inventory_form.date.errors }}
+        {{ inventory_form.date }}
+      </td>
+      <td>
+        {{ inventory_form.standing_volume.errors }}
+        {{ inventory_form.standing_volume }}
+      </td>
+      <td>
+        {{ inventory_form.remarks.errors }}
+        {{ inventory_form.remarks }}
+      </td>
+      <td>
+        <input type="submit" name="add_inventory" value="{% translate 'add' %}">
+      </td>
+    </tr>
+  </tbody>
+</table>
+</form>
+{% endblock %}

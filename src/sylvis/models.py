@@ -99,6 +99,11 @@ class Sector(MPTTModel, ComputedFieldsModel):
         return polygon
 
     @property
+    def plots_set(self):
+        descendent_sectors = self.get_descendants(include_self=True)
+        return Plot.objects.filter(sector__in=descendent_sectors)
+
+    @property
     def section_set(self):
         descendent_sectors = self.get_descendants(include_self=True)
         return Section.objects.filter(plot__sector__in=descendent_sectors)

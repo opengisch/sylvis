@@ -40,7 +40,7 @@
 
 <h2>{% translate "Main data" %}</h2>
 <div class="columns">
-  <div>
+  <div class="scrollable">
     {% block details %}
     {% endblock %}
   </div>
@@ -55,68 +55,12 @@
 
 
 <h2>{% translate "Sections" %}</h2>
-{% if entity.computed_sections_detail %}
-  <div class="columns">
-    <table>
-      <thead>
-        <tr><th>{% translate "year" %}</th><th>{% translate "count" %}</th></tr>
-      </thead>
-      <tbody>
-        {% for year, value in entity.computed_sections_detail.items %}
-        <tr><td>{{year}}</td><td>{{value}}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div>
-      {{bokeh_graph_history | safe}}
-      {{bokeh_graph_planned | safe}}
-    </div>
-  </div>
-{% else %}
-  {% translate 'Nothing to show.' %}
-{% endif %}
+{% block sections %}{% endblock %}
 
 <h2>{% translate "Treatment" %}</h2>
-{% if entity.computed_sections_detail %}
-  <div class="columns">
-    <table>
-      <thead>
-        <tr><th>{% translate "year" %}</th><th>{% translate "count" %}</th></tr>
-      </thead>
-      <tbody>
-        {% for year, value in entity.computed_inventories_detail.items %}
-        <tr><td>{{year}}</td><td>{{value}}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div>
-      TODO: CHARTS
-    </div>
-  </div>
-{% else %}
-  {% translate 'Nothing to show.' %}
-{% endif %}
-
+{% block treatments %}{% endblock %}
 
 <h2>{% translate "Inventories" %}</h2>
-{% if entity.computed_sections_detail %}
-  <div class="columns">
-    <table>
-      <thead>
-        <tr><th>{% translate "year" %}</th><th>{% translate "count" %}</th></tr>
-      </thead>
-      <tbody>
-        {% for year, value in entity.computed_treatments_detail.items %}
-        <tr><td>{{year}}</td><td>{{value}}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div>
-      TODO: CHARTS
-    </div>
-  </div>
-{% else %}
-  {% translate 'Nothing to show.' %}
-{% endif %}
+{% block inventories %}{% endblock %}
 
 {% endblock %}
