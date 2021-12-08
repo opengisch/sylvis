@@ -13,8 +13,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libproj-dev \
     gdal-bin \
-    gettext \
-    && apt-get clean
+    gettext
 
 # install dependencies
 COPY ./requirements.txt .
