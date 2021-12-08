@@ -63,8 +63,12 @@ ssh-keygen -t ed25519 -C "system@sylvis.org"
 # Clone the git repository
 git clone git@github.com:opengisch/sylvis.git
 
-# Start the stack
+# Configure the stack
 cd sylvis
+cp .env.example .env
+nano .env
+
+# Start the stack
 docker-compose -f docker-compose.yml up --build -d --remove-orphans
 ```
 
