@@ -4,6 +4,10 @@
 ## Quickstart
 
 ```
+# Configure the stack
+cp .env.example .env
+nano .env
+
 # Start the stack
 docker compose up --build -d
 
@@ -38,14 +42,53 @@ Note that the setup includes auto-reload, so that Django reloads automatically w
 To add other apps, run `docker compose exec django python manage.py startapp yourapp`, then add `yourapp` in the `INSTALLED_APPS` list of `src/settings.py`.
 
 
-## Typical deployment
+## Deployment
 
+
+### Initial setup
+
+Run the following step on the server (Ubuntu-20.04)
 ```
-docker compose -f docker-compose.yml up --build -d
+# Install docker, docker-compose and git
+sudo apt update
+sudo apt-get install -y docker.io docker-compose git
+sudo usermod -aG docker $USER
+sudo reboot 0
+
+# Create a key pair
+ssh-keygen -t ed25519 -C "system@sylvis.org"
+
+# Add the contents of ~/.ssh/id_ed25519.pub as a deploy key in the Github repository
+
+# Clone the git repository
+git clone git@github.com:opengisch/sylvis.git
+
+# Start the stack
+cd sylvis
+docker-compose -f docker-compose.yml up --build -d --remove-orphans
 ```
 
-Ensure you're somehow backing up the postgres database and the media_volume !!
+### Manual deployement
 
+To deploy changes manually:
+```
+cd sylvis
+git pull
+docker-compose -f docker-compose.yml up --build -d --remove-orphans
+```
+
+### Automated deployement
+
+Github CI will automatically deploy changes when a new release is created.
+
+It requires the following secrets:
+- `DEPLOY_SSH_PRIVATE_KEY`
+- `DEPLOY_SSH_USER`
+- `DEPLOY_SSH_HOST`
+- `DEPLOY_SSH_PORT`
+
+It is assumed the checkout repo is available under `./sylvis` for that SSH user, with a `.env` file
+containing the deployment stack config.
 
 ## Code style
 

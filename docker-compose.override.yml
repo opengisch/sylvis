@@ -10,7 +10,6 @@ services:
     environment:
       # live-reload, show exceptions in browser, etc.
       DJANGO_DEBUG: "true"
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
     volumes:
       # mounting the source code for live reloading
       - ./src/:/usr/src/app

@@ -16,6 +16,7 @@ jobs:
 
     - name: setup Docker
       run: |
+        cp .env.example .env
         docker-compose up --build -d
         sleep 10
 
