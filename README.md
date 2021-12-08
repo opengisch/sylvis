@@ -90,6 +90,23 @@ It requires the following secrets:
 It is assumed the checkout repo is available under `./sylvis` for that SSH user, with a `.env` file
 containing the deployment stack config.
 
+
+## Translations
+
+Translations are managed on the [Sylvis transifex project](https://www.transifex.com/opengisch/sylvis). New strings are pushed automatically with Github workflows, and translations are pulled in the entrypoint.
+
+No manual steps should be required to have up to date translations, but for reference, here are the steps to push/pull translations:
+
+```
+# Push new strings to transifex
+docker-compose exec -T django python manage.py makemessages -l en
+docker-compose exec django tx push --source
+
+# Pull translations from transifex
+docker-compose exec -T django tx pull -a
+docker-compose exec django python manage.py compilemessages
+```
+
 ## Code style
 
 We recommend using the provided pre-commit setup that will ensure consistent coding style. Enable with like this :

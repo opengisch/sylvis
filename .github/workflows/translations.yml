@@ -13,9 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: install requirements
-        run: sudo apt-get install transifex-client
-
       - name: setup Docker
         run: |
           cp .env.example .env
@@ -23,16 +20,14 @@ jobs:
           sleep 10
 
       - name: create tx files
-        run: |
-          mkdir -p src/sylvis/locale
-          docker-compose exec -T -w /usr/src/app/sylvis django python ../manage.py makemessages -l en
+        run: docker-compose exec -T django python manage.py makemessages -l en
+
+      - name: "🌍 Push Translations"
+        run: docker-compose exec django tx push --source
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
 
       - name: "failure logs"
         if: failure()
         run: |
           docker-compose logs
-
-      - name: "🌍 Push Translations"
-        env:
-          TX_TOKEN: ${{ secrets.TX_TOKEN }}
-        run: tx push --source
