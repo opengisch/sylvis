@@ -2,27 +2,42 @@ version: '3.7'
 
 services:
 
+  caddy:
+    build:
+      context: .
+      dockerfile: docker/caddy/Dockerfile
+    volumes:
+      - caddy_data:/data
+      - static_volume:/static_volume
+      - media_volume:/media_volume
+    restart: unless-stopped
+    environment:
+      HOST: ${HOST:?}
+    ports:
+      - 80:80
+      - 443:443
+
   django:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
     restart: unless-stopped
     volumes:
-      - static_volume:/usr/src/static
-      - media_volume:/usr/src/media
+      - static_volume:/static_volume
+      - media_volume:/media_volume
     environment:
       DJANGO_DEBUG: "false"
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DJANGO_STATIC_ROOT: /usr/src/static
-      DJANGO_MEDIA_ROOT: /usr/src/media
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "8000:8000"
-    command: python3 manage.py runserver 0.0.0.0:8000 --insecure
+      HOST: ${HOST:?}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?}
+      DJANGO_STATIC_ROOT: /static_volume
+      DJANGO_MEDIA_ROOT: /media_volume
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    command: python3 manage.py runserver 0.0.0.0:8000
 
   postgres:
     image: postgis/postgis:13-3.1
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
     ## UNCOMMENT IF YOU NEED THE POSTGIS DATABASE TO BE ACCESSIBLE
     # ports:
     # - 5432:5432
@@ -31,3 +46,4 @@ services:
 volumes:
   static_volume:
   media_volume:
+  caddy_data:
