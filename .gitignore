@@ -6,9 +6,6 @@ __pycache__
 # local config
 .env
 
-# do not save tx in source
-src/sylvis/locale
-
 # django volumes (mounted in docker-compose.override.yml)
 /static
 /media

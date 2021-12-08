@@ -35,6 +35,7 @@ services:
       DJANGO_STATIC_ROOT: /static_volume
       DJANGO_MEDIA_ROOT: /media_volume
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      TX_TOKEN: ${TX_TOKEN}
     command: python3 manage.py runserver 0.0.0.0:8000
 
   postgres:

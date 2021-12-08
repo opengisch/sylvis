@@ -1,9 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[sylvis.django-po]
-file_filter = src/sylvis/locale/<lang>/LC_MESSAGES/django.po
-minimum_perc = 0
-source_file = src/sylvis/locale/en/LC_MESSAGES/django.po
-source_lang = en
-type = PO
