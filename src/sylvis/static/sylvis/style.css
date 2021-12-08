@@ -81,6 +81,17 @@ nav {
 
     }
 
+    nav .language select {
+        border: none;
+        background: none;
+        width: 100%;
+        color: #3c9765;
+        font-size: inherit;
+    }
+    nav .language select:hover {
+        color: #4db164;
+    }
+
 main {
     flex-grow: 1;
     padding: 40px;

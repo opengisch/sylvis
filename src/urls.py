@@ -21,4 +21,5 @@ from sylvis import urls as sylvis_urls
 urlpatterns = [
     path("", include(sylvis_urls)),
     path("admin", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
 ]

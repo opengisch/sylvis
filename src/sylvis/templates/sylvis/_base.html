@@ -21,6 +21,19 @@
         <input placeholder="{% translate 'Search not implemented... ' %}" disabled="disabled">
       </div>
       <span class="spacer"></span>
+      <form class="language" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        <select name="language" onchange="this.form.submit()">
+          {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+              {{ language.name_local|title }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
       <a href="{% url 'admin:index' %}">{% translate 'Admin' %}</a>
     </nav>
 
