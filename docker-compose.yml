@@ -12,7 +12,7 @@ services:
       - media_volume:/media_volume
     restart: unless-stopped
     environment:
-      HOST: ${HOST:?}
+      SYLVIS_HOST: ${SYLVIS_HOST:?}
     ports:
       - 80:80
       - 443:443
@@ -27,7 +27,7 @@ services:
       - media_volume:/media_volume
     environment:
       DJANGO_DEBUG: "false"
-      HOST: ${HOST:?}
+      SYLVIS_HOST: ${SYLVIS_HOST:?}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?}
       DJANGO_STATIC_ROOT: /static_volume
       DJANGO_MEDIA_ROOT: /media_volume
