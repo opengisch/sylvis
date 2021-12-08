@@ -2,6 +2,8 @@ from collections import defaultdict
 from datetime import date
 
 from bokeh.embed import components
+from bokeh.models import LinearAxis, Range1d
+from bokeh.models.tickers import FixedTicker
 from bokeh.plotting import figure
 from django.contrib import admin
 from django.core.serializers import serialize
@@ -45,12 +47,36 @@ def sector_view(request, sector_id):
         volumes[section.date.year] += section.volume
 
     sections_filled = [sections.get(y, 0) for y in years]
+    volumes_filled = [volumes.get(y, 0) for y in years]
+
     p1 = figure(
-        height=250, title="Total of done sections", toolbar_location=None, tools=""
+        y_range=(0, max(sections_filled) + 1),
+        height=250,
+        title="Total of done sections",
+        toolbar_location=None,
+        tools="",
     )
-    p1.vbar(x=years, top=sections_filled, width=0.9)
+    p1.xaxis.axis_label = "Year"
+    p1.yaxis.axis_label = "Sections"
+    p1.xaxis.ticker = FixedTicker(ticks=years)
     p1.xgrid.grid_line_color = None
-    p1.y_range.start = 0
+
+    p1.line(x=years, y=sections_filled, line_width=0.9)
+    p1.circle(x=years, y=sections_filled, radius=0.1)
+
+    # Setting the second y axis range name and range
+    p1.extra_y_ranges = {"foo": Range1d(start=0, end=1.1 * float(max(volumes_filled)))}
+    # Adding the second axis to the plot.
+    p1.add_layout(LinearAxis(y_range_name="foo", axis_label="Volumes"), "right")
+
+    p1.vbar(
+        x=years,
+        top=volumes_filled,
+        width=0.9,
+        fill_color="green",
+        fill_alpha=0.5,
+        y_range_name="foo",
+    )
 
     # planned
     descendent_sectors = sector.get_descendants(include_self=True)
@@ -66,11 +92,17 @@ def sector_view(request, sector_id):
         sections[section_date.year] += 1
 
     sections_filled = [sections.get(y, 0) for y in years]
+
     p2 = figure(
         height=250, title="Total planned sections", toolbar_location=None, tools=""
     )
-    p2.vbar(x=years, top=sections_filled, width=0.9)
+    p2.xaxis.axis_label = "Year"
+    p2.yaxis.axis_label = "Sections"
+    p2.xaxis.ticker = FixedTicker(ticks=years)
     p2.xgrid.grid_line_color = None
+
+    p2.line(x=years, y=sections_filled, line_width=0.9)
+    p2.circle(x=years, y=sections_filled, radius=0.1)
     p2.y_range.start = 0
 
     bokeh_script_1, bokeh_graph_1 = components(p1)
