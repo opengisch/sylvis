@@ -1,0 +1,24 @@
+{% extends "sylvis/_detail_base.html" %}
+
+{% load i18n mptt_tags %}
+
+{% block details %}
+
+<table>
+  <tbody>
+    <tr>
+      <td>{% translate "Total sections" %}</td>
+      <td>{{entity.computed_sections_total}}</td>
+    </tr>
+    <tr>
+      <td>{% translate "Total inventories" %}</td>
+      <td>{{entity.computed_inventories_total}}</td>
+    </tr>
+    <tr>
+      <td>{% translate "Total treatments" %}</td>
+      <td>{{entity.computed_treatments_total}}</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}

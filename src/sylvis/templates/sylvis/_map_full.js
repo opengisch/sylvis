@@ -1,3 +1,7 @@
+////////////////// Constants  //////////////////
+
+const sectorUrlTemplate = '{% url 'sylvis:sector_detail' '00000000-0000-0000-0000-000000000000' %}';
+const plotUrlTemplate = '{% url 'sylvis:plot_detail' '00000000-0000-0000-0000-000000000000' %}';
 
 ////////////////// Utils //////////////////
 

@@ -6,6 +6,7 @@ from bokeh.models import LinearAxis, Range1d
 from bokeh.models.tickers import FixedTicker
 from bokeh.plotting import figure
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.db.models import Max
 from django.shortcuts import get_object_or_404, render
@@ -13,25 +14,25 @@ from django.shortcuts import get_object_or_404, render
 from .models import Plot, Sector
 
 
+@login_required
+def home(request):
+    return render(request, "sylvis/home.html")
+
+
+@login_required
 def plot_view(request, plot_id):
     plot = get_object_or_404(Plot, id=plot_id)
     return render(
         request,
-        "sylvis/aggregate_view.html",
+        "sylvis/detail_plot.html",
         {
             "entity": plot,
-            # django-admin integration (stuff like side-menu, breadcrumbs...)
-            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
-            **admin.site.each_context(request),
-            "opts": plot._meta,
-            "title": str(plot),
-            "subtitle": str(plot),
-            "object_id": plot.pk,
-            "original": plot,
+            "features_geojson": serialize("geojson", [plot], geometry_field="geom"),
         },
     )
 
 
+@login_required
 def sector_view(request, sector_id):
     sector = get_object_or_404(Sector, id=sector_id)
 
@@ -104,23 +105,19 @@ def sector_view(request, sector_id):
     p2.line(x=years, y=sections_filled, line_width=0.9)
     p2.circle(x=years, y=sections_filled, radius=0.1)
     p2.y_range.start = 0
+    p2.sizing_mode = "scale_both"
 
     bokeh_script_1, bokeh_graph_1 = components(p1)
     bokeh_script_2, bokeh_graph_2 = components(p2)
 
     return render(
         request,
-        "sylvis/aggregate_view.html",
+        "sylvis/detail_sector.html",
         {
             "entity": sector,
-            # django-admin integration (stuff like side-menu, breadcrumbs...)
-            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
-            **admin.site.each_context(request),
-            "opts": sector._meta,
-            "title": str(sector),
-            "subtitle": str(sector),
-            "object_id": sector.pk,
-            "original": sector,
+            "features_geojson": serialize(
+                "geojson", [sector], geometry_field="computed_geom"
+            ),
             "bokeh_script_history": bokeh_script_1,
             "bokeh_graph_history": bokeh_graph_1,
             "bokeh_script_planned": bokeh_script_2,
@@ -129,6 +126,7 @@ def sector_view(request, sector_id):
     )
 
 
+@login_required
 def map_view(request):
     plots = Plot.objects.all()
     plots_geojson = serialize(

@@ -1,0 +1,28 @@
+{% extends "sylvis/_detail_base.html" %}
+
+{% load i18n mptt_tags %}
+
+{% block details %}
+
+<table>
+  <tbody>
+    <tr>
+      <td>{% translate "Sections rotation period" %}</td>
+      <td>{{entity.rotation_sections}}</td>
+    </tr>
+    <tr>
+      <td>{% translate "Treatment rotation period" %}</td>
+      <td>{{entity.rotation_treatments}}</td>
+    </tr>
+    <tr>
+      <td>{% translate "Next planned section" %}</td>
+      <td>{{entity.planned_next_section}}</td>
+    </tr>
+    <tr>
+      <td>{% translate "Next planned treatment" %}</td>
+      <td>{{entity.planned_next_treatment}}</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}
