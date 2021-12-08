@@ -1,4 +1,4 @@
-{$HOST} {
+{$SYLVIS_HOST} {
     # Static files
     handle /static/* {
         root * /static_volume

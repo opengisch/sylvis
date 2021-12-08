@@ -18,10 +18,10 @@ jobs:
       run: pip install pre-commit
 
     - name: Run pre-commit
-      run: pre-commit run --all-files
+      run: pre-commit run --all-files --show-diff-on-failure --verbose
 
     - name: Pre-commit failed ! Read this
       if: failure()
       run: |
-        echo "Run `pip install pre-commit; pre-commit install;` to ensure your code is properly formatted"
-        echo "Fix your current code with `pre-commit run --all-files`"
+        echo 'To ensure your code is properly formatted, run: pip install pre-commit; pre-commit install;'
+        echo 'Fix your current code with: pre-commit run --all-files'
