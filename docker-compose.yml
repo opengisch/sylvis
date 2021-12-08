@@ -18,9 +18,12 @@ services:
       - 443:443
 
   django:
+    image: opengisch/sylvis-django:latest
     build:
       context: .
       dockerfile: docker/django/Dockerfile
+      cache_from:
+        - opengisch/sylvis-django:latest
     restart: unless-stopped
     volumes:
       - static_volume:/static_volume
