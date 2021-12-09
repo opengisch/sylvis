@@ -6,10 +6,14 @@ from bokeh.models import LinearAxis, Range1d
 from bokeh.models.tickers import FixedTicker
 from bokeh.plotting import figure
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.core.serializers import serialize
 from django.db.models import Max
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.cache import cache_page
 
 from .forms import AddInventoryForm, AddSectionForm, AddTreatmentForm
 from .models import Plot, Sector
@@ -157,6 +161,7 @@ def sector_view(request, sector_id):
 
 
 @login_required
+@cache_page(60 * 15)
 def map_view(request):
     plots = Plot.objects.all()
     plots_geojson = serialize(
@@ -193,3 +198,11 @@ def map_view(request):
             "sectors_geojsons": f"[{','.join(sectors_geojsons)}]",
         },
     )
+
+
+@receiver(post_save, sender=Plot)
+@receiver(post_save, sender=Sector)
+@receiver(post_delete, sender=Plot)
+@receiver(post_delete, sender=Sector)
+def delete_cache(sender, **kwargs):
+    cache.clear()
