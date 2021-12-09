@@ -103,7 +103,7 @@ No manual steps should be required to have up to date translations, but for refe
 
 ```
 # Push new strings to transifex
-docker-compose exec -T django python manage.py makemessages -l en
+docker-compose exec -T django bash -c 'cd sylvis && python ../manage.py makemessages -l en'
 docker-compose exec django tx push --source
 
 # Pull translations from transifex
