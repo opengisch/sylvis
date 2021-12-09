@@ -102,7 +102,6 @@ var map = new ol.Map({
     zoom: 7
   }),
   controls: ol.control.defaults().extend([
-    new ol.control.MousePosition(),
     new ol.control.LayerSwitcher()
   ])
 });
@@ -114,7 +113,6 @@ var map = new ol.Map({
 
 var selectInteraction = new ol.interaction.Select({condition: ol.events.condition.click});
 map.addInteraction(selectInteraction);
-
 selectInteraction.on('select', function (e) {
   let feature = e.selected[0];
   let layer = selectInteraction.getLayer(feature);
