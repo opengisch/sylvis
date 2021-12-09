@@ -5,7 +5,6 @@ from bokeh.embed import components
 from bokeh.models import LinearAxis, Range1d
 from bokeh.models.tickers import FixedTicker
 from bokeh.plotting import figure
-from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.db.models import Max
@@ -192,8 +191,5 @@ def map_view(request):
         {
             "plots_geojson": plots_geojson,
             "sectors_geojsons": f"[{','.join(sectors_geojsons)}]",
-            # django-admin integration (stuff like side-menu, breadcrumbs...)
-            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
-            **admin.site.each_context(request),
         },
     )
