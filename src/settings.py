@@ -117,8 +117,8 @@ LANGUAGES = [
     ("fr", _("French")),
     ("en", _("English")),
 ]
-LOCALE_PATHS = ["/sylvis/locale"]
-TIME_ZONE = "UTC"
+
+TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
