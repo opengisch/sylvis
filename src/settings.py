@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # vendor apps
     "mptt",
     "computedfields",
+    "admin_auto_filters",
 ]
 
 MIDDLEWARE = [

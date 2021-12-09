@@ -4,3 +4,4 @@ django-computedfields~=0.1.5
 psycopg2
 bokeh~=2.4.2
 transifex-client~=0.14.3
+django-admin-autocomplete-filter~=0.7.1
