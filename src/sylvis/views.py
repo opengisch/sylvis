@@ -6,32 +6,62 @@ from bokeh.models import LinearAxis, Range1d
 from bokeh.models.tickers import FixedTicker
 from bokeh.plotting import figure
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.db.models import Max
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
+from .forms import AddInventoryForm, AddSectionForm, AddTreatmentForm
 from .models import Plot, Sector
 
 
+@login_required
+def home(request):
+    return render(request, "sylvis/home.html")
+
+
+@login_required
 def plot_view(request, plot_id):
     plot = get_object_or_404(Plot, id=plot_id)
+
+    section_form = AddSectionForm(plot_id)
+    inventory_form = AddInventoryForm(plot_id)
+    treatment_form = AddTreatmentForm(plot_id)
+
+    if request.method == "POST":
+        if "add_section" in request.POST:
+            section_form = AddSectionForm(plot_id, request.POST)
+            if section_form.is_valid():
+                section_form.save()
+                return HttpResponseRedirect(request.path_info)
+
+        if "add_inventory" in request.POST:
+            inventory_form = AddInventoryForm(plot_id, request.POST)
+            if inventory_form.is_valid():
+                inventory_form.save()
+                return HttpResponseRedirect(request.path_info)
+
+        if "add_treatment" in request.POST:
+            treatment_form = AddTreatmentForm(plot_id, request.POST)
+            if treatment_form.is_valid():
+                treatment_form.save()
+                return HttpResponseRedirect(request.path_info)
+
     return render(
         request,
-        "sylvis/aggregate_view.html",
+        "sylvis/detail_plot.html",
         {
             "entity": plot,
-            # django-admin integration (stuff like side-menu, breadcrumbs...)
-            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
-            **admin.site.each_context(request),
-            "opts": plot._meta,
-            "title": str(plot),
-            "subtitle": str(plot),
-            "object_id": plot.pk,
-            "original": plot,
+            "features_geojson": serialize("geojson", [plot], geometry_field="geom"),
+            "section_form": section_form,
+            "inventory_form": inventory_form,
+            "treatment_form": treatment_form,
         },
     )
 
 
+@login_required
 def sector_view(request, sector_id):
     sector = get_object_or_404(Sector, id=sector_id)
 
@@ -61,8 +91,8 @@ def sector_view(request, sector_id):
     p1.xaxis.ticker = FixedTicker(ticks=years)
     p1.xgrid.grid_line_color = None
 
-    p1.line(x=years, y=sections_filled, line_width=0.9)
-    p1.circle(x=years, y=sections_filled, radius=0.1)
+    p1.line(x=years, y=sections_filled, line_width=0.9, line_color="#3c9765")
+    p1.circle(x=years, y=sections_filled, radius=0.1, fill_color="#4db164")
 
     # Setting the second y axis range name and range
     p1.extra_y_ranges = {"foo": Range1d(start=0, end=1.1 * float(max(volumes_filled)))}
@@ -73,10 +103,12 @@ def sector_view(request, sector_id):
         x=years,
         top=volumes_filled,
         width=0.9,
-        fill_color="green",
+        fill_color="#4db164",
+        line_color="#3c9765",
         fill_alpha=0.5,
         y_range_name="foo",
     )
+    p1.sizing_mode = "scale_both"
 
     # planned
     descendent_sectors = sector.get_descendants(include_self=True)
@@ -101,26 +133,22 @@ def sector_view(request, sector_id):
     p2.xaxis.ticker = FixedTicker(ticks=years)
     p2.xgrid.grid_line_color = None
 
-    p2.line(x=years, y=sections_filled, line_width=0.9)
-    p2.circle(x=years, y=sections_filled, radius=0.1)
+    p2.line(x=years, y=sections_filled, line_width=0.9, line_color="#3c9765")
+    p2.circle(x=years, y=sections_filled, radius=0.1, fill_color="#4db164")
     p2.y_range.start = 0
+    p2.sizing_mode = "scale_both"
 
     bokeh_script_1, bokeh_graph_1 = components(p1)
     bokeh_script_2, bokeh_graph_2 = components(p2)
 
     return render(
         request,
-        "sylvis/aggregate_view.html",
+        "sylvis/detail_sector.html",
         {
             "entity": sector,
-            # django-admin integration (stuff like side-menu, breadcrumbs...)
-            # see https://github.com/django/django/blob/97e9a84d2746f76a635455c13bd512ea408755ac/django/contrib/admin/options.py#L1642-L1655
-            **admin.site.each_context(request),
-            "opts": sector._meta,
-            "title": str(sector),
-            "subtitle": str(sector),
-            "object_id": sector.pk,
-            "original": sector,
+            "features_geojson": serialize(
+                "geojson", [sector], geometry_field="computed_geom"
+            ),
             "bokeh_script_history": bokeh_script_1,
             "bokeh_graph_history": bokeh_graph_1,
             "bokeh_script_planned": bokeh_script_2,
@@ -129,6 +157,7 @@ def sector_view(request, sector_id):
     )
 
 
+@login_required
 def map_view(request):
     plots = Plot.objects.all()
     plots_geojson = serialize(

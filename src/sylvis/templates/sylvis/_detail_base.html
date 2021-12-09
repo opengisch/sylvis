@@ -1,0 +1,66 @@
+{% extends "sylvis/_base.html" %}
+
+{% load model_display_utils i18n mptt_tags admin_urls admin_modify %}
+
+
+{% block extrahead %}
+{% comment %}TODO: don't hardcode these (instead retrieve from django.contrib.gis.forms.widgets.OpenLayersWidget){% endcomment %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.css" type="text/css" media="all" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/ol-layerswitcher@2.0.0/src/ol-layerswitcher.css" type="text/css" media="all" rel="stylesheet">
+<script src="https://unpkg.com/ol-layerswitcher@2.0.0/dist/ol-layerswitcher.js"></script>
+
+<link href=”http://cdn.pydata.org/bokeh/release/bokeh-2.4.2.min.css" rel=”stylesheet” type=”text/css”>
+<link href=”http://cdn.pydata.org/bokeh/release/bokeh-widgets-2.4.2.min.css" rel=”stylesheet” type=”text/css”>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.2.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.2.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.2.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.4.2.min.js"></script>
+{{bokeh_script_history | safe}}
+{{bokeh_script_planned | safe}}
+{% endblock %}
+
+{% block content %}
+
+<div class="edit-link">
+  <a href="{{entity.get_admin_url}}">✎</a>
+</div>
+
+<p class="breadcrumbs">
+{% for ancestor in entity.sector.get_ancestors %}
+<a href="{{ancestor.get_absolute_url}}">{{ancestor}}</a> ›
+{% endfor %}
+{{entity}}
+</p>
+
+<h1>
+  {{entity|get_model_verbose_name}}
+  <b>{{entity}}</b>
+</h1>
+
+<h2>{% translate "Main data" %}</h2>
+<div class="columns">
+  <div class="scrollable">
+    {% block details %}
+    {% endblock %}
+  </div>
+  <div>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      var featuresGeojson = {{features_geojson|safe}};
+      {% include "sylvis/_map_simple.js" %}
+    </script>
+  </div>
+</div>
+
+
+<h2>{% translate "Sections" %}</h2>
+{% block sections %}{% endblock %}
+
+<h2>{% translate "Treatment" %}</h2>
+{% block treatments %}{% endblock %}
+
+<h2>{% translate "Inventories" %}</h2>
+{% block inventories %}{% endblock %}
+
+{% endblock %}

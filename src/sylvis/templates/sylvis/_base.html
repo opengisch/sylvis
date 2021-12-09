@@ -1,0 +1,47 @@
+{% load i18n static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <title>{% translate 'Sylvis Prototype' %}</title>
+      <link rel="icon" type="image/x-icon" href="{% static 'sylvis/sylvis_logo.svg' %}" />
+      <link href="{% static 'sylvis/style.css' %}" rel="stylesheet">
+      {% block extrahead %}{% endblock extrahead %}
+  </head>
+  <body>
+
+    <!-- Sidebar-->
+    <nav>
+      <img src="{% static 'sylvis/sylvis_logo.svg' %}" />
+      <a href="{% url 'sylvis:home' %}">{% translate 'Home' %}</a>
+      <a href="{% url 'sylvis:map' %}">{% translate 'Map' %}</a>
+      <div class="search">
+        <input placeholder="{% translate 'Search not implemented... ' %}" disabled="disabled">
+      </div>
+      <span class="spacer"></span>
+      <form class="language" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        <select name="language" onchange="this.form.submit()">
+          {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+              {{ language.name_local|title }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+      <a href="{% url 'admin:index' %}">{% translate 'Admin' %}</a>
+    </nav>
+
+    <!-- Content -->
+    <main class="{% block main_class %}{% endblock %}">
+    {% block content %}
+    {% endblock content %}
+    </main>
+
+  </body>
+</html>

@@ -99,6 +99,11 @@ class Sector(MPTTModel, ComputedFieldsModel):
         return polygon
 
     @property
+    def plots_set(self):
+        descendent_sectors = self.get_descendants(include_self=True)
+        return Plot.objects.filter(sector__in=descendent_sectors)
+
+    @property
     def section_set(self):
         descendent_sectors = self.get_descendants(include_self=True)
         return Section.objects.filter(plot__sector__in=descendent_sectors)
@@ -114,7 +119,7 @@ class Sector(MPTTModel, ComputedFieldsModel):
         return Treatment.objects.filter(plot__sector__in=descendent_sectors)
 
     def get_absolute_url(self):
-        return reverse("admin:sector_view", args=[self.id])
+        return reverse("sylvis:sector_detail", args=[self.id])
 
     def get_admin_url(self):
         return reverse("admin:sylvis_sector_change", args=[self.id])
@@ -155,7 +160,7 @@ class Plot(models.Model):
     etale = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse("admin:plot_view", args=[self.id])
+        return reverse("sylvis:plot_detail", args=[self.id])
 
     def get_admin_url(self):
         return reverse("admin:sylvis_plot_change", args=[self.id])
