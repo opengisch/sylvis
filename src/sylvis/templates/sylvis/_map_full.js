@@ -102,7 +102,6 @@ var map = new ol.Map({
     zoom: 7
   }),
   controls: ol.control.defaults().extend([
-    new ol.control.MousePosition(),
     new ol.control.LayerSwitcher()
   ])
 });
@@ -112,40 +111,23 @@ var map = new ol.Map({
 
 ////////////////// Interactions //////////////////
 
-
-map.on('click', function(event) {
-  map.forEachFeatureAtPixel(event.pixel, function(feature, layer) {
-    let url = null;
-    if( layer == plotsLayer ) {
-      url = plotUrlTemplate.replace('00000000-0000-0000-0000-000000000000', feature.get("pk"));
-    } else if ( sectorsGroup.getLayers().getArray().includes(layer) ) {
-      url = sectorUrlTemplate.replace('00000000-0000-0000-0000-000000000000', feature.get("pk"));
-    }
-    if( url ) {
-      window.location.href = url;
-      return;
-    }
-  });
+var selectInteraction = new ol.interaction.Select({condition: ol.events.condition.click});
+map.addInteraction(selectInteraction);
+selectInteraction.on('select', function (e) {
+  let feature = e.selected[0];
+  let layer = selectInteraction.getLayer(feature);
+  let url = null;
+  if( layer == plotsLayer ) {
+    url = plotUrlTemplate.replace('00000000-0000-0000-0000-000000000000', feature.get("pk"));
+  } else if ( sectorsGroup.getLayers().getArray().includes(layer) ) {
+    url = sectorUrlTemplate.replace('00000000-0000-0000-0000-000000000000', feature.get("pk"));
+  }
+  if( url ) {
+    window.location.href = url;
+    return;
+  }
 });
 
-// let selected = null;
-// const status = document.getElementById('status');
-
-// map.on('pointermove', function (e) {
-//   if (selected !== null) {
-//     selected.setStyle(hiddenStyle);
-//     selected = null;
-//   }
-
-//   map.forEachFeatureAtPixel(e.pixel, function (f) {
-//     selected = f;
-//     f.setStyle(highlightStyle);
-//     return true;
-//   },
-//     {
-//       layerFilter: function(layer) {return layer === sectorsLayer;}
-//   });
-// });
 
 ////////////////// Initial setup //////////////////
 
