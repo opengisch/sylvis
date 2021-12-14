@@ -22,28 +22,40 @@ class Sector(MPTTModel, ComputedFieldsModel):
 
     @computed(
         models.IntegerField(default=0),
-        depends=[["children", ["computed_sections_total"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_sections_total"]],
+            ["plots.section_set", ["id"]],
+        ],
     )
     def computed_sections_total(self):
         return self.section_set.count()
 
     @computed(
         models.IntegerField(default=0),
-        depends=[["children", ["computed_inventories_total"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_inventories_total"]],
+            ["plots.inventory_set", ["id"]],
+        ],
     )
     def computed_inventories_total(self):
         return self.inventory_set.count()
 
     @computed(
         models.IntegerField(default=0),
-        depends=[["children", ["computed_treatments_total"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_treatments_total"]],
+            ["plots.treatment_set", ["id"]],
+        ],
     )
     def computed_treatments_total(self):
         return self.treatment_set.count()
 
     @computed(
         models.JSONField(default=dict),
-        depends=[["children", ["computed_sections_detail"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_sections_detail"]],
+            ["plots.section_set", ["date", "volume"]],
+        ],
     )
     def computed_sections_detail(self):
         counts = defaultdict(int)
@@ -53,7 +65,10 @@ class Sector(MPTTModel, ComputedFieldsModel):
 
     @computed(
         models.JSONField(default=dict),
-        depends=[["children", ["computed_inventories_detail"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_inventories_detail"]],
+            ["plots.inventory_set", ["date", "standing_volume"]],
+        ],
     )
     def computed_inventories_detail(self):
         counts = defaultdict(int)
@@ -63,7 +78,10 @@ class Sector(MPTTModel, ComputedFieldsModel):
 
     @computed(
         models.JSONField(default=dict),
-        depends=[["children", ["computed_treatments_detail"]], ["plots", ["id"]]],
+        depends=[
+            ["children", ["computed_treatments_detail"]],
+            ["plots.treatment_set", ["date"]],
+        ],
     )
     def computed_treatments_detail(self):
         counts = defaultdict(int)
