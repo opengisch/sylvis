@@ -42,6 +42,7 @@ services:
     image: postgis/postgis:13-3.1
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    restart: unless-stopped
     ## UNCOMMENT IF YOU NEED THE POSTGIS DATABASE TO BE ACCESSIBLE
     # ports:
     # - 5432:5432
